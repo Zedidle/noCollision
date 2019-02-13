@@ -1,5 +1,6 @@
 const UserDataManager = {
     _userData: {
+        chapterLevel: 5,
         carLevel: 43,
     },
 
@@ -15,11 +16,6 @@ const UserDataManager = {
         this._userData = userData;
         localStorage.setItem("userData", JSON.stringify(userData));
     },
-
-
-
-
-
 };
 
 
