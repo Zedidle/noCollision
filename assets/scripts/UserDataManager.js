@@ -1,6 +1,6 @@
 const UserDataManager = {
     _userData: {
-        chapterLevel: 9,
+        chapterLevel: 10,
         carLevel: 43,
     },
 
@@ -17,6 +17,5 @@ const UserDataManager = {
         localStorage.setItem("userData", JSON.stringify(userData));
     },
 };
-
 
 module.exports = UserDataManager;

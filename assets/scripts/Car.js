@@ -79,8 +79,8 @@ cc.Class({
     onBeginContact: function (contact, selfCollider, otherCollider) {
         console.log("car-onBeginContact");
 
-        console.log("selfCollider, otherCollider :");
-        console.log(selfCollider, otherCollider);
+        // console.log("selfCollider, otherCollider :");
+        // console.log(selfCollider, otherCollider);
         
         let r1 = selfCollider.node.getComponent("Car").point.rotation;
         let r2 = otherCollider.node.getComponent("Car").point.rotation;

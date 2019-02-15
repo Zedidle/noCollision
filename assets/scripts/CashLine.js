@@ -1,4 +1,5 @@
 let AudioManager = require("AudioManager");
+let Main = require("Main");
 
 cc.Class({
     extends: cc.Component,
@@ -66,14 +67,20 @@ cc.Class({
     onCollisionEnter: function (other, self) {
         console.log('on collision enter');
 
-        console.log("other-rotation", other.node.rotation);
-        console.log("self-rotation", self.node.rotation);
+        // console.log("other-rotation", other.node.rotation);
+        // console.log("self-rotation", self.node.rotation);
 
         let de = self.node.rotation - other.node.rotation;
         if(85<de && de<95){
             let carLevel = other.node.carLevel;
             this.collisionExplosion(carLevel);
+            setTimeout(()=>{
+                if(other.node){
+                    Main.instance.carPool.put(other.node);
+                }
+            },5000);
         }
+
 
         // 碰撞系统会计算出碰撞组件在世界坐标系下的相关的值，并放到 world 这个属性里面
         var world = self.world;

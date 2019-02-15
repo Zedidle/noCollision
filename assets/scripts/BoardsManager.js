@@ -368,7 +368,65 @@ const BoardsManager = {
                     startY: [-460],
                     rotation: 45, // left: 0, down: 270, right:180, up:90
                     vx:-100,
+                    vy:100
+                },
+                {
+                    startX: [-680],
+                    startY: [640],
+                    rotation: 225,
+                    vx:100,
                     vy:-100
+                },
+                {
+                    startX: [687],
+                    startY: [841],
+                    rotation: 315, // left: 0, down: 270, right:180, up:90
+                    vx:-100,
+                    vy:-100
+                },
+                {
+                    startX: [-723],
+                    startY: [-752],
+                    rotation: 135,
+                    vx:100,
+                    vy:100
+                }
+            ],
+            cashLines:[
+                {
+                    x: -143,
+                    y: 209,
+                    rotation: 135, // left: 90, down: 360, right: 270, up: 180
+                    longScale: 0.65,
+                },
+                {
+                    x: 145,
+                    y: -80,
+                    rotation: 315,
+                    longScale: 0.65,
+                },
+                {
+                    x: -147,
+                    y: -80,
+                    rotation: 405, // left: 90, down: 360, right: 270, up: 180
+                    longScale: 0.65,
+                },
+                {
+                    x: 144,
+                    y: 210,
+                    rotation: 225,
+                    longScale: 0.65,
+                }
+            ]
+        },
+        { // 10
+            startPoints:[
+                {
+                    startX: [640],
+                    startY: [-460],
+                    rotation: 45, // left: 0, down: 270, right:180, up:90
+                    vx:-100,
+                    vy:100
                 },
                 {
                     startX: [-680],

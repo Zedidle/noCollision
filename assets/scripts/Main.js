@@ -10,6 +10,8 @@ let Main = cc.Class({
         CashLine: cc.Prefab,
         boards: cc.Node,
         whiteShine: cc.Node,
+        activeCashLines: cc.Node,
+        activeCars: cc.Node,
     },
 
     statics:{
@@ -27,6 +29,9 @@ let Main = cc.Class({
         cc.director.getCollisionManager().enabled = true;
         cc.director.getPhysicsManager().enabled = true;
 
+        this.carPool = new cc.NodePool();
+        this.cashLinePool = new cc.NodePool();
+
         this.isGameStart = false;
         this.camera = this.node.getChildByName("camera");
         this.setGravity(0);
@@ -35,12 +40,12 @@ let Main = cc.Class({
         setInterval(() => {
             this.createCar().getComponent("Car").move();
         }, this.carInterval);
-
     },
 
     gameStart() {
         this.isGameStart = true;
         this.hadCollision = false;
+        this.destroyAllCarsAndCashLines();
 
         this.camera.getComponent(cc.Camera).zoomRatio = 1;
         this.camera.x = 0, this.camera.y = 0;
@@ -66,23 +71,35 @@ let Main = cc.Class({
     createCashLine() {
         let cashLines = this.cashLines;
         for (let cashLine of cashLines) {
-            let theCashLine = cc.instantiate(this.CashLine);
+            let theCashLine;
+            if(this.cashLinePool.size() > 0){
+                theCashLine = this.cashLinePool.get();
+            }else{
+                theCashLine = cc.instantiate(this.CashLine);
+            }
             theCashLine.x = cashLine.x;
             theCashLine.y = cashLine.y;
             theCashLine.getChildByName("cashLineLongContent").rotation = cashLine.rotation;
             theCashLine.getChildByName("cashLineLongContent").scaleX = cashLine.longScale;
-            this.node.addChild(theCashLine);
+            this.activeCashLines.addChild(theCashLine);
         }
     },
 
     createCar() {
         console.log("Main-createCar");
         let point = this.startPoints[Math.floor(Math.random() * this.startPoints.length)];
-        // console.log(point);
 
         let carLevel = Math.floor(Math.random() * UserDataManager.getUserData().carLevel);
-        let car = cc.instantiate(this.Car);
+        let car;
+        if(this.carPool.size() > 0){
+            car = this.carPool.get();
+        }else{
+            car = cc.instantiate(this.Car);
+        }
         car.getComponent("Car").setPoint(point, this.chapterLevel);
+        for(let item of car.children){
+            item.active = false;
+        }
 
         let theCar = car.getChildByName("car_" + carLevel);
         theCar.active = true;
@@ -105,7 +122,7 @@ let Main = cc.Class({
 
         let rigidbody = car.getComponent(cc.RigidBody);
         rigidbody.enabledContactListener = true;
-        this.node.addChild(car);
+        this.activeCars.addChild(car);
         return car;
     },
 
@@ -149,11 +166,25 @@ let Main = cc.Class({
         this.camera.runAction(move);
     },
 
+    destroyAllCarsAndCashLines(){
+        let activeCashLines = this.activeCashLines.children;
+        for(let cashLine of activeCashLines){
+            this.cashLinePool.put(cashLine);
+        }
+        let activeCars = this.activeCars.children;
+        for(let car of activeCars){
+            this.carPool.put(car);
+        }
+    },
+
+    gameWin(){
+        console.log("Main-gameWin");
+    },
+
     gameOver(){
         if(!this.isGameStart) return;
         this.isGameStart = false;
         console.log("Main-gameOver");
-
 
     },
 
