@@ -2,14 +2,24 @@ let UserDataManager = require("UserDataManager");
 let BoardsManager = require("BoardsManager");
 let AudioManager = require("AudioManager");
 
-cc.Class({
+let Main = cc.Class({
     extends: cc.Component,
 
     properties: {
         Car: cc.Prefab,
         CashLine: cc.Prefab,
         boards: cc.Node,
+        whiteShine: cc.Node,
+    },
 
+    statics:{
+        instance: null,
+    },
+
+    ctor(){
+        if(!Main.instance){
+            Main.instance = this;
+        }
     },
 
     onLoad() {
@@ -17,6 +27,8 @@ cc.Class({
         cc.director.getCollisionManager().enabled = true;
         cc.director.getPhysicsManager().enabled = true;
 
+        this.isGameStart = false;
+        this.camera = this.node.getChildByName("camera");
         this.setGravity(0);
         this.gameStart();
 
@@ -26,12 +38,16 @@ cc.Class({
 
     },
 
-
     gameStart() {
+        this.isGameStart = true;
+        this.hadCollision = false;
+
+        this.camera.getComponent(cc.Camera).zoomRatio = 1;
+        this.camera.x = 0, this.camera.y = 0;
+
         console.log("Main-gameStart");
         this.chapterLevel = UserDataManager.getUserData().chapterLevel;
         this.carInterval = 3000 - this.chapterLevel * 20;
-
 
         let boardIndex = (this.chapterLevel - 1) % 10;
         console.log(boardIndex);
@@ -73,7 +89,7 @@ cc.Class({
         car.width = theCar.width;
         car.height = theCar.height;
         car.theCar = theCar;
-        car.level = carLevel;
+        car.carLevel = carLevel;
 
         let colliderPoints = car.getComponent(cc.PhysicsPolygonCollider).points;
 
@@ -97,6 +113,49 @@ cc.Class({
         cc.director.getPhysicsManager().gravity = cc.v2(0, -32 * g);
     },
 
+    makeCollision(rotation){
+        if(this.hadCollision) return;
+        this.hadCollision = true;
+
+        console.log("Main-makeCollision");
+        console.log("rotation", rotation);
+        
+        this.camera.getComponent(cc.Camera).zoomRatio = 1.2;
+        this.whiteShine.active = true;
+        this.whiteShine.runAction(cc.sequence(
+            cc.fadeTo(0.1, 150),
+            cc.fadeTo(0.1, 40),
+            cc.callFunc(()=>{
+                this.whiteShine.active = false;
+            })
+        ));
+        let theX=0, theY=0;
+        if(rotation < 90){
+            theX = -100;
+            theY = 100;
+        }else if(rotation < 180){
+            theX = 100;
+            theY = 100;
+        }else if(rotation < 270){
+            theX = 100;
+            theY = -100;
+        }else{
+            theX = -100;
+            theY = -100;
+        }
+
+        let move = cc.moveTo(5, theX, theY);
+        move.easing(cc.easeOut(3));
+        this.camera.runAction(move);
+    },
+
+    gameOver(){
+        if(!this.isGameStart) return;
+        this.isGameStart = false;
+        console.log("Main-gameOver");
+
+
+    },
 
     start() {
 

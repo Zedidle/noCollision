@@ -1,4 +1,5 @@
 let AudioManager = require("AudioManager");
+let Main = require("Main");
 
 cc.Class({
     extends: cc.Component,
@@ -29,8 +30,8 @@ cc.Class({
         //     vy:-150
         // }
         this.point = point;
-        this.node.x = point.startX[Math.floor(point.startX.length * Math.random())];
-        this.node.y = point.startY[Math.floor(point.startY.length * Math.random())];
+        this.node.x = point.startX[Math.floor(point.startX.length * Math.random())] + (-5 + Math.random() * 10);
+        this.node.y = point.startY[Math.floor(point.startY.length * Math.random())] + (-5 + Math.random() * 10);
 
         let carSpeedScale = (chapterLevel*0.01 + 1) * (1 + Math.random());
         this.vx = carSpeedScale * this.point.vx;
@@ -80,13 +81,17 @@ cc.Class({
 
         console.log("selfCollider, otherCollider :");
         console.log(selfCollider, otherCollider);
+        
+        let r1 = selfCollider.node.getComponent("Car").point.rotation;
+        let r2 = otherCollider.node.getComponent("Car").point.rotation;
 
-        if(
-            selfCollider.node.getComponent("Car").point.rotation != 
-            otherCollider.node.getComponent("Car").point.rotation
-        ){
+        if(r1 != r2){
             AudioManager.instance.play("crash");
             selfCollider.node.getComponent("Car").shine();
+            Main.instance.makeCollision((r1+r2) / 2);  // up:0, right:1, down:2, left:3 
+            setTimeout(()=>{
+                Main.instance.gameOver();
+            },2000);
         }
     },
 

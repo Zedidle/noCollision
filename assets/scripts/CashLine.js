@@ -9,20 +9,16 @@ cc.Class({
 
     onLoad () {
         console.log("CashLine-onLoad");
-        // this.node.on(cc.Node.EventType.TOUCH_START, () => {
-        //     this.collisionExplosion();
-        // }, this);
     },
 
-    collisionExplosion() {
+    collisionExplosion(carLevel) {
         console.log("CashLine-collisionExplosion");
         AudioManager.instance.play("explosion");
 
-        let level = Math.ceil(Math.random() * 43);
         let cashLineLongContent = this.node;
         let money = cashLineLongContent.parent.getChildByName("money");
         money.active = true;
-        money.getComponent(cc.Label).string = "$" + level*20;
+        money.getComponent(cc.Label).string = "$" + (carLevel+1)*20;
         console.log(money.zIndex);
         money.zIndex = 1000;
 
@@ -69,7 +65,16 @@ cc.Class({
      */
     onCollisionEnter: function (other, self) {
         console.log('on collision enter');
-        this.collisionExplosion();
+
+        console.log("other-rotation", other.node.rotation);
+        console.log("self-rotation", self.node.rotation);
+
+        let de = self.node.rotation - other.node.rotation;
+        if(85<de && de<95){
+            let carLevel = other.node.carLevel;
+            this.collisionExplosion(carLevel);
+        }
+
         // 碰撞系统会计算出碰撞组件在世界坐标系下的相关的值，并放到 world 这个属性里面
         var world = self.world;
 
