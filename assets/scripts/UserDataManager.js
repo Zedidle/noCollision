@@ -1,6 +1,6 @@
 const UserDataManager = {
     _userData: {
-        chapterLevel: 10,
+        chapterLevel: 7,
         carLevel: 43,
     },
 

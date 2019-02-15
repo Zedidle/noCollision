@@ -51,21 +51,50 @@ let Main = cc.Class({
         this.camera.x = 0, this.camera.y = 0;
 
         console.log("Main-gameStart");
-        this.chapterLevel = UserDataManager.getUserData().chapterLevel;
-        this.carInterval = 3000 - this.chapterLevel * 20;
+        
+        let theLevel = UserDataManager.getUserData().chapterLevel;
+        this.boardLevel = this.adjustBoardLevel(theLevel);
 
-        let boardIndex = (this.chapterLevel - 1) % 10;
+        this.carInterval = 3000 - this.boardLevel * 20;
+
+        let boardIndex = (this.boardLevel - 1) % 10;
         console.log(boardIndex);
         let boards = this.boards.children;
         for (let board of boards) {
             board.active = false;
         }
-        this.boards.getChildByName("board" + boardIndex).active = true;
+        let theBoard = this.boards.getChildByName("board" + boardIndex);
+        theBoard.active = true;
+        theBoard.color = this.getTimeColor(theLevel);
+        
         let boardData = BoardsManager.getBoardData(boardIndex);
         this.startPoints = boardData.startPoints;
         this.cashLines = boardData.cashLines;
 
         this.createCashLine();
+    },
+
+    adjustBoardLevel(theLevel){
+        if(theLevel == 7){
+            return 1;
+        }else{
+            return theLevel;
+        }
+    },
+
+    getTimeColor(chapterLevel){
+        let sunColor = new cc.Color(255,255,255);
+        let midNightColor = new cc.Color(201,146,159);
+        let nightColor = new cc.Color(122,128,156);
+
+        let d = chapterLevel % 9;
+        if(d < 3){
+            return sunColor
+        }else if(d < 6){
+            return midNightColor;
+        }else{
+            return nightColor;
+        }
     },
 
     createCashLine() {
