@@ -52,8 +52,8 @@ let Main = cc.Class({
 
         console.log("Main-gameStart");
         
-        let theLevel = UserDataManager.getUserData().chapterLevel;
-        this.boardLevel = this.adjustBoardLevel(theLevel);
+        this.chapterLevel = UserDataManager.getUserData().chapterLevel;
+        this.boardLevel = this.adjustBoardLevel(this.chapterLevel);
 
         this.carInterval = 3000 - this.boardLevel * 20;
 
@@ -65,7 +65,7 @@ let Main = cc.Class({
         }
         let theBoard = this.boards.getChildByName("board" + boardIndex);
         theBoard.active = true;
-        theBoard.color = this.getTimeColor(theLevel);
+        theBoard.color = this.getWeather(this.chapterLevel);
         
         let boardData = BoardsManager.getBoardData(boardIndex);
         this.startPoints = boardData.startPoints;
@@ -82,7 +82,7 @@ let Main = cc.Class({
         }
     },
 
-    getTimeColor(chapterLevel){
+    getWeather(chapterLevel){
         let sunColor = new cc.Color(255,255,255);
         let midNightColor = new cc.Color(201,146,159);
         let nightColor = new cc.Color(122,128,156);
@@ -125,6 +125,7 @@ let Main = cc.Class({
         }else{
             car = cc.instantiate(this.Car);
         }
+        console.log(point, this.chapterLevel);
         car.getComponent("Car").setPoint(point, this.chapterLevel);
         for(let item of car.children){
             item.active = false;

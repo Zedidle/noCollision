@@ -43,8 +43,8 @@ cc.Class({
         // console.log(this.point);
         this.node.rotation = this.point.rotation;
         let rigidbody = this.node.getComponent(cc.RigidBody);
+        console.log(this.vx, this.vy);
         rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
-
     },
 
     onToggle() {
