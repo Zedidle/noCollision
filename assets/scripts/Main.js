@@ -58,7 +58,7 @@ let Main = cc.Class({
 
         this.carInterval = 3000 - this.boardLevel * 20;
 
-        let boardIndex = (this.boardLevel - 1) % 10;
+        let boardIndex = this.boardLevel % 10;
         console.log(boardIndex);
         let boards = this.boards.children;
         for (let board of boards) {
@@ -72,12 +72,12 @@ let Main = cc.Class({
         this.startPoints = boardData.startPoints;
         this.cashLines = boardData.cashLines;
 
-        this.createCashLine();
+        this.createCashLines();
     },
 
     adjustBoardLevel(theLevel){
-        if(theLevel == 7){
-            return 1;
+        if(theLevel == 6){
+            return 0;
         }else{
             return theLevel;
         }
@@ -98,7 +98,7 @@ let Main = cc.Class({
         }
     },
 
-    createCashLine() {
+    createCashLines() {
         let cashLines = this.cashLines;
         for (let cashLine of cashLines) {
             let theCashLine;
@@ -109,8 +109,8 @@ let Main = cc.Class({
             }
             theCashLine.x = cashLine.x;
             theCashLine.y = cashLine.y;
-            theCashLine.getChildByName("cashLineLongContent").rotation = cashLine.rotation;
-            theCashLine.getChildByName("cashLineLongContent").scaleX = cashLine.longScale;
+            theCashLine.getChildByName("cashLineLongContent").rotation = cashLine.rota;
+            theCashLine.getChildByName("cashLineLongContent").scaleX = cashLine.scaleX;
             this.activeCashLines.addChild(theCashLine);
         }
     },
@@ -126,7 +126,6 @@ let Main = cc.Class({
         }else{
             car = cc.instantiate(this.Car);
         }
-        console.log(point, this.chapterLevel);
         car.getComponent("Car").setPoint(point, this.chapterLevel);
         for(let item of car.children){
             item.active = false;
@@ -141,7 +140,7 @@ let Main = cc.Class({
 
         let colliderPoints = car.getComponent(cc.PhysicsPolygonCollider).points;
 
-        // 修改顺序 第3象限 -> 第4象限 -> 第1象限 -> 第2象限， 否则会导致碰撞线交错而报错
+        // 修改顺序: 第3象限 -> 第4象限 -> 第1象限 -> 第2象限， 否则会导致碰撞线交错而报错
         colliderPoints[0].x = -car.width / 2.2;
         colliderPoints[0].y = -car.height / 2.2;
         colliderPoints[1].x = car.width / 2.2;

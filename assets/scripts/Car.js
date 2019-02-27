@@ -21,17 +21,9 @@ cc.Class({
 
     setPoint(point, chapterLevel) {
         // console.log("Car-setPoint");
-        // console.log(point);
-        // {
-        //     startX: [-300,-150,0],
-        //     startY: [1100],
-        //     rotation: 270, // left: 0, down: 270, right:180, up:90
-        //     vx:0,   
-        //     vy:-150
-        // }
         this.point = point;
-        this.node.x = point.startX[Math.floor(point.startX.length * Math.random())] + (-5 + Math.random() * 10);
-        this.node.y = point.startY[Math.floor(point.startY.length * Math.random())] + (-5 + Math.random() * 10);
+        this.node.x = point.x[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
+        this.node.y = point.x[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
 
         let carSpeedScale = (chapterLevel*0.01 + 1) * (1 + Math.random());
         this.vx = carSpeedScale * this.point.vx;
@@ -40,8 +32,7 @@ cc.Class({
 
     move() {
         // console.log("Car-move");
-        // console.log(this.point);
-        this.node.rotation = this.point.rotation;
+        this.node.rotation = this.point.rota;
         let rigidbody = this.node.getComponent(cc.RigidBody);
         console.log(this.vx, this.vy);
         rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
