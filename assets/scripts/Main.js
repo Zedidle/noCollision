@@ -38,6 +38,7 @@ let Main = cc.Class({
         this.gameStart();
 
         setInterval(() => {
+            if(this.isGameStart == false) return;
             this.createCar().getComponent("Car").move();
         }, this.carInterval);
     },

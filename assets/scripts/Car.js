@@ -78,6 +78,7 @@ cc.Class({
     // 只在两个碰撞体开始接触时被调用一次
     onBeginContact: function (contact, selfCollider, otherCollider) {
         console.log("car-onBeginContact");
+        if(Main.instance.isGameStart == false) return;
 
         // console.log("selfCollider, otherCollider :");
         // console.log(selfCollider, otherCollider);
