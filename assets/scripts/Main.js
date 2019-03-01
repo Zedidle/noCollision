@@ -14,12 +14,12 @@ let Main = cc.Class({
         activeCars: cc.Node,
     },
 
-    statics:{
+    statics: {
         instance: null,
     },
 
-    ctor(){
-        if(!Main.instance){
+    ctor() {
+        if (!Main.instance) {
             Main.instance = this;
         }
     },
@@ -38,7 +38,7 @@ let Main = cc.Class({
         this.gameStart();
 
         setInterval(() => {
-            if(this.isGameStart == false) return;
+            if (this.isGameStart == false) return;
             this.createCar().getComponent("Car").move();
         }, this.carInterval);
     },
@@ -52,7 +52,7 @@ let Main = cc.Class({
         this.camera.x = 0, this.camera.y = 0;
 
         console.log("Main-gameStart");
-        
+
         this.chapterLevel = UserDataManager.getUserData().chapterLevel;
         this.boardLevel = this.adjustBoardLevel(this.chapterLevel);
 
@@ -67,44 +67,49 @@ let Main = cc.Class({
         let theBoard = this.boards.getChildByName("board" + boardIndex);
         theBoard.active = true;
         theBoard.color = this.getWeather(this.chapterLevel);
-        
+
         let boardData = BoardsManager.getBoardData(boardIndex);
         this.startPoints = boardData.startPoints;
-        this.cashLines = boardData.cashLines;
 
+        console.log("this.startPoints");
+        console.log(this.startPoints);
+
+        this.cashLines = boardData.cashLines;
         this.createCashLines();
     },
 
-    adjustBoardLevel(theLevel){
-        if(theLevel == 6){
+    adjustBoardLevel(theLevel) {
+        if (theLevel == 6) {
             return 0;
-        }else{
+        } else {
             return theLevel;
         }
     },
 
-    getWeather(chapterLevel){
-        let sunColor = new cc.Color(255,255,255);
-        let midNightColor = new cc.Color(201,146,159);
-        let nightColor = new cc.Color(122,128,156);
+    getWeather(chapterLevel) {
+        let sunColor = new cc.Color(255, 255, 255);
+        let midNightColor = new cc.Color(201, 146, 159);
+        let nightColor = new cc.Color(122, 128, 156);
 
         let d = chapterLevel % 9;
-        if(d < 3){
+        if (d < 3) {
             return sunColor
-        }else if(d < 6){
+        } else if (d < 6) {
             return midNightColor;
-        }else{
+        } else {
             return nightColor;
         }
     },
 
     createCashLines() {
+        console.log("Main-createCashLines");
+        console.log("cashLines:", cashLines);
         let cashLines = this.cashLines;
         for (let cashLine of cashLines) {
             let theCashLine;
-            if(this.cashLinePool.size() > 0){
+            if (this.cashLinePool.size() > 0) {
                 theCashLine = this.cashLinePool.get();
-            }else{
+            } else {
                 theCashLine = cc.instantiate(this.CashLine);
             }
             theCashLine.x = cashLine.x;
@@ -116,18 +121,19 @@ let Main = cc.Class({
     },
 
     createCar() {
-        console.log("Main-createCar");
+        // console.log("Main-createCar");
         let point = this.startPoints[Math.floor(Math.random() * this.startPoints.length)];
+        // console.log(point);
 
         let carLevel = Math.floor(Math.random() * UserDataManager.getUserData().carLevel);
         let car;
-        if(this.carPool.size() > 0){
+        if (this.carPool.size() > 0) {
             car = this.carPool.get();
-        }else{
+        } else {
             car = cc.instantiate(this.Car);
         }
         car.getComponent("Car").setPoint(point, this.chapterLevel);
-        for(let item of car.children){
+        for (let item of car.children) {
             item.active = false;
         }
 
@@ -160,33 +166,31 @@ let Main = cc.Class({
         cc.director.getPhysicsManager().gravity = cc.v2(0, -32 * g);
     },
 
-    makeCollision(rotation){
-        if(this.hadCollision) return;
+    makeCollision(rotation) {
+        console.log("Main-makeCollision");
+        if (this.hadCollision) return;
         this.hadCollision = true;
 
-        console.log("Main-makeCollision");
-        console.log("rotation", rotation);
-        
         this.camera.getComponent(cc.Camera).zoomRatio = 1.2;
         this.whiteShine.active = true;
         this.whiteShine.runAction(cc.sequence(
             cc.fadeTo(0.1, 150),
             cc.fadeTo(0.1, 40),
-            cc.callFunc(()=>{
+            cc.callFunc(() => {
                 this.whiteShine.active = false;
             })
         ));
-        let theX=0, theY=0;
-        if(rotation < 90){
+        let theX = 0, theY = 0;
+        if (rotation < 90) {
             theX = -100;
             theY = 100;
-        }else if(rotation < 180){
+        } else if (rotation < 180) {
             theX = 100;
             theY = 100;
-        }else if(rotation < 270){
+        } else if (rotation < 270) {
             theX = 100;
             theY = -100;
-        }else{
+        } else {
             theX = -100;
             theY = -100;
         }
@@ -196,23 +200,23 @@ let Main = cc.Class({
         this.camera.runAction(move);
     },
 
-    destroyAllCarsAndCashLines(){
+    destroyAllCarsAndCashLines() {
         let activeCashLines = this.activeCashLines.children;
-        for(let cashLine of activeCashLines){
+        for (let cashLine of activeCashLines) {
             this.cashLinePool.put(cashLine);
         }
         let activeCars = this.activeCars.children;
-        for(let car of activeCars){
+        for (let car of activeCars) {
             this.carPool.put(car);
         }
     },
 
-    gameWin(){
+    gameWin() {
         console.log("Main-gameWin");
     },
 
-    gameOver(){
-        if(!this.isGameStart) return;
+    gameOver() {
+        if (!this.isGameStart) return;
         this.isGameStart = false;
         console.log("Main-gameOver");
 

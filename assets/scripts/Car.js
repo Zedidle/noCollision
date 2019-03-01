@@ -21,20 +21,22 @@ cc.Class({
 
     setPoint(point, chapterLevel) {
         // console.log("Car-setPoint");
+        // console.log("point:", point);
         this.point = point;
-        this.node.x = point.x[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
-        this.node.y = point.x[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
 
-        let carSpeedScale = (chapterLevel*0.01 + 1) * (1 + Math.random());
+        this.node.x = point.x[Math.floor(point.x.length * Math.random())] + (-5 + Math.random() * 10);
+        this.node.y = point.y[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
+
+        let carSpeedScale = (chapterLevel * 0.01 + 1) * (1 + Math.random());
         this.vx = carSpeedScale * this.point.vx;
         this.vy = carSpeedScale * this.point.vy;
     },
 
     move() {
-        // console.log("Car-move");
+        console.log("Car-move");
+        console.log(this.vx, this.vy, this.point.rota);
         this.node.rotation = this.point.rota;
         let rigidbody = this.node.getComponent(cc.RigidBody);
-        console.log(this.vx, this.vy);
         rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
     },
 
@@ -53,37 +55,34 @@ cc.Class({
         }, this);
     },
 
-    shine(){
-        this.node.theCar.color = new cc.Color(180,180,180);
+    shine() {
+        this.node.theCar.color = new cc.Color(180, 180, 180);
         this.node.scale = 1.05;
-        setTimeout(()=>{
+        setTimeout(() => {
             this.node.scale = 1.0;
-            this.node.theCar.color = new cc.Color(255,255,255);
-        },100);
+            this.node.theCar.color = new cc.Color(255, 255, 255);
+        }, 100);
     },
 
-    sendGameOverEvent(){
+    sendGameOverEvent() {
 
     },
 
     // 只在两个碰撞体开始接触时被调用一次
     onBeginContact: function (contact, selfCollider, otherCollider) {
         console.log("car-onBeginContact");
-        if(Main.instance.isGameStart == false) return;
+        if (!Main.instance.isGameStart) return;
 
-        // console.log("selfCollider, otherCollider :");
-        // console.log(selfCollider, otherCollider);
-        
-        let r1 = selfCollider.node.getComponent("Car").point.rotation;
-        let r2 = otherCollider.node.getComponent("Car").point.rotation;
+        let r1 = selfCollider.node.getComponent("Car").point.rota;
+        let r2 = otherCollider.node.getComponent("Car").point.rota;
 
-        if(r1 != r2){
+        if (r1 != r2) {
             AudioManager.instance.play("crash");
             selfCollider.node.getComponent("Car").shine();
-            Main.instance.makeCollision((r1+r2) / 2);  // up:0, right:1, down:2, left:3 
-            setTimeout(()=>{
+            Main.instance.makeCollision((r1 + r2) / 2);  // up:0, right:1, down:2, left:3 
+            setTimeout(() => {
                 Main.instance.gameOver();
-            },2000);
+            }, 2000);
         }
     },
 
