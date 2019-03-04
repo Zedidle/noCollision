@@ -44,36 +44,30 @@ let Main = cc.Class({
     },
 
     gameStart() {
+        console.log("Main-gameStart");
+        this.destroyAllCarsAndCashLines();
+
         this.isGameStart = true;
         this.hadCollision = false;
-        this.destroyAllCarsAndCashLines();
 
         this.camera.getComponent(cc.Camera).zoomRatio = 1;
         this.camera.x = 0, this.camera.y = 0;
 
-        console.log("Main-gameStart");
-
         this.chapterLevel = UserDataManager.getUserData().chapterLevel;
         this.boardLevel = this.adjustBoardLevel(this.chapterLevel);
 
-        this.carInterval = 3000 - this.boardLevel * 20;
+        this.carInterval = 2000 - this.boardLevel * 10;
 
-        let boardIndex = this.boardLevel % 10;
-        console.log(boardIndex);
         let boards = this.boards.children;
         for (let board of boards) {
             board.active = false;
         }
-        let theBoard = this.boards.getChildByName("board" + boardIndex);
+        let theBoard = this.boards.getChildByName("board" + this.boardLevel);
         theBoard.active = true;
         theBoard.color = this.getWeather(this.chapterLevel);
 
-        let boardData = BoardsManager.getBoardData(boardIndex);
+        let boardData = BoardsManager.getBoardData(this.boardLevel);
         this.startPoints = boardData.startPoints;
-
-        console.log("this.startPoints");
-        console.log(this.startPoints);
-
         this.cashLines = boardData.cashLines;
         this.createCashLines();
     },
@@ -131,6 +125,7 @@ let Main = cc.Class({
             car = this.carPool.get();
         } else {
             car = cc.instantiate(this.Car);
+            
         }
         car.getComponent("Car").setPoint(point, this.chapterLevel);
         for (let item of car.children) {
@@ -166,7 +161,7 @@ let Main = cc.Class({
         cc.director.getPhysicsManager().gravity = cc.v2(0, -32 * g);
     },
 
-    makeCollision(rotation) {
+    makeCollision(r1, r2) {
         console.log("Main-makeCollision");
         if (this.hadCollision) return;
         this.hadCollision = true;
@@ -181,18 +176,14 @@ let Main = cc.Class({
             })
         ));
         let theX = 0, theY = 0;
-        if (rotation < 90) {
-            theX = -100;
-            theY = 100;
-        } else if (rotation < 180) {
-            theX = 100;
-            theY = 100;
-        } else if (rotation < 270) {
-            theX = 100;
-            theY = -100;
-        } else {
-            theX = -100;
-            theY = -100;
+        if(r1 < 90 || r2 < 90){
+            theX = -90;
+        }else if(r1 < 180 || r2 < 180){
+            theY = 90;
+        }else if(r1 < 270 || r2 < 270){
+            theX = 90;
+        }else{
+            theY = -90;
         }
 
         let move = cc.moveTo(5, theX, theY);
@@ -216,8 +207,6 @@ let Main = cc.Class({
     },
 
     gameOver() {
-        if (!this.isGameStart) return;
-        this.isGameStart = false;
         console.log("Main-gameOver");
 
     },

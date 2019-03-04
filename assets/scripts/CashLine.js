@@ -23,6 +23,7 @@ cc.Class({
         console.log(money.zIndex);
         money.zIndex = 1000;
 
+        
         let down1 = cc.moveTo(0.4, 0, 0);
         let down2 = cc.moveTo(0.1, 0, 0);
         let down3 = cc.moveTo(0.03, 0, 0);
@@ -33,10 +34,12 @@ cc.Class({
         down3.easing(cc.easeIn(3.0));
         up1.easing(cc.easeOut(3.0));
         up2.easing(cc.easeOut(3.0));
+
+        money.stopAllActions();
+        money.y = 100;
         money.runAction(cc.sequence(
             down1, up1, down2, up2, down3,
             cc.callFunc(() => {
-                money.y = 100;
                 money.active = false;
             })
         ));
@@ -59,12 +62,8 @@ cc.Class({
 
     },
 
-    /**
-     * 当碰撞产生的时候调用
-     * @param  {Collider} other 产生碰撞的另一个碰撞组件
-     * @param  {Collider} self  产生碰撞的自身的碰撞组件
-     */
     onCollisionEnter: function (other, self) {
+        if(!Main.instance.isGameStart) return;
         let de = self.node.rotation - other.node.rotation;
         if (85 < de && de < 95) {
             this.collisionExplosion(other.node.carLevel);
@@ -72,7 +71,7 @@ cc.Class({
                 if (other.node) {
                     Main.instance.carPool.put(other.node);
                 }
-            }, 5000);
+            }, 2000);
         }
     },
 

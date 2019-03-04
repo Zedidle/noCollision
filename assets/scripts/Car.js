@@ -12,6 +12,7 @@ cc.Class({
     },
 
     onEnable() {
+        this.isStoping = false;
         this.onToggle();
     },
 
@@ -42,17 +43,22 @@ cc.Class({
 
     onToggle() {
         // console.log("Car-onToggle");
-        this.node.on(cc.Node.EventType.TOUCH_START, () => {
-            let rigidbody = this.node.getComponent(cc.RigidBody);
-            this.shine();
-            if (this.isStoping) {
-                this.isStoping = false;
-                rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
-            } else {
-                this.isStoping = true;
-                rigidbody.linearVelocity = cc.v2(0, 0);
-            }
-        }, this);
+        if(!this.hadOnToggole){
+            this.hadOnToggole = true;
+            this.node.on(cc.Node.EventType.TOUCH_START, () => {
+                console.log("Car-TOUCH_START");
+                let rigidbody = this.node.getComponent(cc.RigidBody);
+                this.shine();
+                if (this.isStoping) {
+                    this.isStoping = false;
+                    rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
+                } else {
+                    this.isStoping = true;
+                    rigidbody.linearVelocity = cc.v2(0, 0);
+                }
+            }, this);
+        }
+
     },
 
     shine() {
@@ -79,10 +85,11 @@ cc.Class({
         if (r1 != r2) {
             AudioManager.instance.play("crash");
             selfCollider.node.getComponent("Car").shine();
-            Main.instance.makeCollision((r1 + r2) / 2);  // up:0, right:1, down:2, left:3 
+            Main.instance.makeCollision(r1, r2);
+            Main.instance.isGameStart = false;
             setTimeout(() => {
                 Main.instance.gameOver();
-            }, 2000);
+            }, 3000);
         }
     },
 
