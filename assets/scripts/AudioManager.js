@@ -46,5 +46,16 @@ const AudioManager = cc.Class({
         cc.audioEngine.play(this[audio], _loop, _volume);
     },
 
+
+    toggle() {
+        if (this.canPlayAudio) {
+            this.canPlayAudio = false;
+            cc.audioEngine.stopAll();
+        } else {
+            this.canPlayAudio = true;
+            AudioManager.instance.play("bgm", true);
+        }
+    },
+
     update(dt) { },
 });

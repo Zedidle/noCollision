@@ -1,0 +1,31 @@
+{
+  "ver": "2.2.0",
+  "uuid": "86d5419b-d586-4022-aaa0-c4943f212d89",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "subMetas": {
+    "hapticsIcon": {
+      "ver": "1.0.3",
+      "uuid": "70eb1106-de05-4889-b5d7-a1880d7659b2",
+      "rawTextureUuid": "86d5419b-d586-4022-aaa0-c4943f212d89",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 92,
+      "height": 81,
+      "rawWidth": 92,
+      "rawHeight": 81,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

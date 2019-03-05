@@ -12,18 +12,17 @@ cc.Class({
         console.log("CashLine-onLoad");
     },
 
-    collisionExplosion(carLevel) {
+    collisionExplosion(exp) {
         console.log("CashLine-collisionExplosion");
         AudioManager.instance.play("explosion");
 
         let cashLineLongContent = this.node;
         let money = cashLineLongContent.parent.getChildByName("money");
         money.active = true;
-        money.getComponent(cc.Label).string = "$" + (carLevel + 1) * 20;
+        money.getComponent(cc.Label).string = "$" + exp;
         console.log(money.zIndex);
         money.zIndex = 1000;
 
-        
         let down1 = cc.moveTo(0.4, 0, 0);
         let down2 = cc.moveTo(0.1, 0, 0);
         let down3 = cc.moveTo(0.03, 0, 0);
@@ -63,15 +62,21 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
-        if(!Main.instance.isGameStart) return;
+        if (!Main.instance.isGameStart) return;
         let de = self.node.rotation - other.node.rotation;
         if (85 < de && de < 95) {
-            this.collisionExplosion(other.node.carLevel);
+            if (Main.instance.firstPass) {
+                Main.instance.firstPass = false;
+                Main.instance.cashDollar.active = true;
+            }
+
+
+            let exp = (other.node.carLevel + 1) * 20;
+            this.collisionExplosion(exp);
+            Main.instance.updateChapterLine(exp);
             setTimeout(() => {
-                if (other.node) {
-                    Main.instance.carPool.put(other.node);
-                }
-            }, 2000);
+                if (other.node) Main.instance.carPool.put(other.node);
+            }, 5000);
         }
     },
 

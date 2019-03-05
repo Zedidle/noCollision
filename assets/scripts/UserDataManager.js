@@ -1,7 +1,8 @@
 const UserDataManager = {
     _userData: {
-        chapterLevel: 41,
-        carLevel: 43,
+        chapterLevel: 1,
+        carLevel: 40,
+        dollar: 0,
     },
 
     loadUserData() {
@@ -15,6 +16,11 @@ const UserDataManager = {
     saveUserData(userData) {
         this._userData = userData;
         localStorage.setItem("userData", JSON.stringify(userData));
+    },
+
+    saveUserData2(key, val){
+        this._userData[key] = val;
+        localStorage.setItem("userData", JSON.stringify(this._userData));
     },
 };
 

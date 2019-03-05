@@ -31,14 +31,20 @@ cc.Class({
         let carSpeedScale = (chapterLevel * 0.01 + 1) * (1 + Math.random());
         this.vx = carSpeedScale * this.point.vx;
         this.vy = carSpeedScale * this.point.vy;
+
+        this.node._iniRotation = this.point.rota;
     },
 
     move() {
-        console.log("Car-move");
-        console.log(this.vx, this.vy, this.point.rota);
+        // console.log("Car-move");
+        // console.log(this.vx, this.vy, this.point.rota);
         this.node.rotation = this.point.rota;
         let rigidbody = this.node.getComponent(cc.RigidBody);
         rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
+    },
+
+    releaseTailGas(){
+
     },
 
     onToggle() {
@@ -52,13 +58,13 @@ cc.Class({
                 if (this.isStoping) {
                     this.isStoping = false;
                     rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
+                    this.node.rotation = this.node._iniRotation;
                 } else {
                     this.isStoping = true;
                     rigidbody.linearVelocity = cc.v2(0, 0);
                 }
             }, this);
         }
-
     },
 
     shine() {
@@ -89,7 +95,7 @@ cc.Class({
             Main.instance.isGameStart = false;
             setTimeout(() => {
                 Main.instance.gameOver();
-            }, 3000);
+            }, 2000);
         }
     },
 
@@ -108,6 +114,4 @@ cc.Class({
         // console.log("car-onPostSolve");
     },
     // update (dt) {},
-
-
 });

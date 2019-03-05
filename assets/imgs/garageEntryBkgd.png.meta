@@ -1,0 +1,31 @@
+{
+  "ver": "2.2.0",
+  "uuid": "5e4319e3-a79a-4572-8e5f-ea2c1208bf6d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "subMetas": {
+    "garageEntryBkgd": {
+      "ver": "1.0.3",
+      "uuid": "81210e99-a1df-4b31-849b-6c4b65a78f3a",
+      "rawTextureUuid": "5e4319e3-a79a-4572-8e5f-ea2c1208bf6d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 2,
+      "trimY": 2,
+      "width": 406,
+      "height": 240,
+      "rawWidth": 410,
+      "rawHeight": 244,
+      "borderTop": 54,
+      "borderBottom": 54,
+      "borderLeft": 71,
+      "borderRight": 50,
+      "subMetas": {}
+    }
+  }
+}
