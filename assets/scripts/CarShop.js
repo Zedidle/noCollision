@@ -27,55 +27,36 @@ let CarShop = cc.Class({
     },
     onLoad() {
         console.log("carShop-onLoad");
-        this.initCarContent2();
-        // this.initCarContent();
-    },
-
-    initCarContent2(){
-        console.log("CarShop-initCarContent2");
-        let cars = this.carContent.children;
-        console.log(cars);
+        this.initCarContent();
     },
 
     initCarContent() {
         console.log("CarShop-initCarContent");
-        for (let item of this.carContent.children) item.removeFromParent();
-
-        // this.carContent.height = 0;
-
-        let startX = 0, startY = 130;
-        let gapX = 20, gapY = 20;
-        let perWidth = 400, perHeight = 260;
-
         let carTotalNum = 43;
         let carLevel = UserDataManager.getUserData().carLevel;
         for (let i = 0; i < carTotalNum; i++) {
             let car = cc.instantiate(this.Car);
-            if (i % 2 == 0) {
-                car.x = startX - 240 - gapX;
-                // this.carContent.height += perHeight + gapY;
-                // console.log("this.carContent.height",this.carContent.height);
-            } else {
-                car.x = startX + 240 + gapX;
-            }
-            car.y = - (startY + Math.floor(i / 2) * (perHeight + gapY));
+            car.removeComponent(cc.RigidBody);
+            car.removeComponent(cc.PhysicsPolygonCollider);
+            car.removeComponent(cc.BoxCollider);
 
             car._isGoods = true;
             let priceTag = car.getChildByName("priceTag"),
-                subText = car.getChildByName("subText");
+                subText = car.getChildByName("subText"),
+                blackCar = car.getChildByName("blackCar");
             if (i < carLevel) {
                 car.getChildByName("car_" + i).active = true;
                 priceTag.active = false;
+                blackCar.active = false;
                 subText.getChildByName("value").getComponent(cc.Label).string = "$" + (i + 1) * 20;
             } else {
                 priceTag.getChildByName("txt").getComponent(cc.Label).string = "$" + (i + 1) * 200;
+                blackCar.active = true;
                 subText.active = false;
                 this.setTabFunc(car);
             }
             this.carContent.addChild(car);
         }
-        this.carContent.height = 4000;
-
     },
 
     setTabFunc(carNode) {

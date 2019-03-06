@@ -230,7 +230,7 @@ let Main = cc.Class({
         } else {
             tailGus = cc.instantiate(this.TailGus);
         }
-        let rota = carNode.rotation;
+        let rota = carNode._iniRotation;
         let adjustX = 0, adjustY = 0;
         if(rota < 90){
             adjustX = carNode.width / 2;
@@ -248,7 +248,7 @@ let Main = cc.Class({
         this.node.addChild(tailGus);
         setTimeout(() => {
             this.tailGusPool.put(tailGus);
-        }, 2000);
+        }, 1000);
     },
 
     setGravity(g) {

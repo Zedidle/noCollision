@@ -31,15 +31,14 @@ cc.Class({
         this.node.y = point.y[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
 
         let self = this;
-        this.makeTailGusInterval = setInterval(()=>{
-            Main.instance.makeTailGus(this.node);
-        },150);
-
-        let carSpeedScale = (chapterLevel * 0.01 + 1) * (1 + Math.random());
+        this.node._iniRotation = this.point.rota;
+        let carSpeedScale = (chapterLevel * 0.01 + 1) * (1 + 0.3 * Math.random());
         this.vx = carSpeedScale * this.point.vx;
         this.vy = carSpeedScale * this.point.vy;
 
-        this.node._iniRotation = this.point.rota;
+        this.makeTailGusInterval = setInterval(()=>{
+            Main.instance.makeTailGus(this.node);
+        },120);
     },
 
     move() {

@@ -8,7 +8,7 @@ cc.Class({
 
     onEnable() {
         let r = Math.random();
-        let t = 1.5;
+        let t = 1;
         this.node.scale = 0.8;
         this.node.opacity = 255;
         if (r < 0.5) {
@@ -16,7 +16,7 @@ cc.Class({
         } else {
             this.node.runAction(
                 cc.spawn(
-                    cc.scaleTo(t, 2),
+                    cc.scaleTo(t, 1.5),
                     cc.fadeTo(t, 0)
                 ));
         }
