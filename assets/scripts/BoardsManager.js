@@ -289,7 +289,7 @@ const BoardsManager = {
                 { x: [-650], y: [194], rota: 201, vx: 200, vy: -75 },
             ],
             cashLines: [
-                { x: 0, y: 800, rota: 180, scaleX: 0.78, },
+                { x: 0, y: 700, rota: 180, scaleX: 0.78, },
             ]
         },
         { // 26
@@ -332,7 +332,7 @@ const BoardsManager = {
                 { x: [-78, 91], y: [-1100], rota: 90, vx: 0, vy: 200 },
             ],
             cashLines: [
-                { x: 0, y: 790, rota: 180, scaleX: 0.78, },
+                { x: 0, y: 700, rota: 180, scaleX: 0.78, },
             ]
         },
         { // 30

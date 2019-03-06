@@ -1,6 +1,5 @@
 let UserDataManager = require("UserDataManager");
 
-
 let Menu = cc.Class({
     extends: cc.Component,
 

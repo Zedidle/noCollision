@@ -1,6 +1,7 @@
 let AudioManager = require("AudioManager");
 let Main = require("Main");
 
+
 cc.Class({
     extends: cc.Component,
 
@@ -14,6 +15,7 @@ cc.Class({
     onEnable() {
         this.isStoping = false;
         this.onToggle();
+
     },
 
     start() {
@@ -27,6 +29,11 @@ cc.Class({
 
         this.node.x = point.x[Math.floor(point.x.length * Math.random())] + (-5 + Math.random() * 10);
         this.node.y = point.y[Math.floor(point.y.length * Math.random())] + (-5 + Math.random() * 10);
+
+        let self = this;
+        this.makeTailGusInterval = setInterval(()=>{
+            Main.instance.makeTailGus(this.node);
+        },150);
 
         let carSpeedScale = (chapterLevel * 0.01 + 1) * (1 + Math.random());
         this.vx = carSpeedScale * this.point.vx;
@@ -43,12 +50,14 @@ cc.Class({
         rigidbody.linearVelocity = cc.v2(this.vx, this.vy);
     },
 
-    releaseTailGas(){
-
+    clearTailGus(){
+        console.log("Car-clearTailGus");
+        clearInterval(this.makeTailGusInterval);
     },
 
     onToggle() {
         // console.log("Car-onToggle");
+        if(this.node._isGoods) return;
         if(!this.hadOnToggole){
             this.hadOnToggole = true;
             this.node.on(cc.Node.EventType.TOUCH_START, () => {

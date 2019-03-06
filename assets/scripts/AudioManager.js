@@ -27,7 +27,7 @@ const AudioManager = cc.Class({
         if (!AudioManager.instance) {
             AudioManager.instance = this;
             cc.game.addPersistRootNode(this.node);
-            this.canPlayAudio = true;
+            this.canPlayAudio = false;
         }
     },
     onLoad() {

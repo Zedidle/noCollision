@@ -20,6 +20,8 @@ let Main = cc.Class({
         gameWinBoard: cc.Node,
         cashDollar: cc.Node,
 
+        TailGus: cc.Prefab,
+
     },
 
     statics: {
@@ -35,6 +37,8 @@ let Main = cc.Class({
     onLoad() {
         UserDataManager.loadUserData();
 
+
+
         this.cashDollar.active = false;
         console.log("Main-onload");
         cc.director.getCollisionManager().enabled = true;
@@ -44,6 +48,7 @@ let Main = cc.Class({
 
         this.carPool = new cc.NodePool();
         this.cashLinePool = new cc.NodePool();
+        this.tailGusPool = new cc.NodePool();
 
         this.isGameStart = false;
         this.camera = this.node.getChildByName("camera");
@@ -53,12 +58,14 @@ let Main = cc.Class({
         this.updateBoard();
         Menu.instance.open();
 
+
+
+
     },
 
     gameStart() {
         console.log("Main-gameStart");
 
-        this.destroyAllCarsAndCashLines();
         Menu.instance.hide();
 
         this.firstPass = true;
@@ -115,7 +122,7 @@ let Main = cc.Class({
         this.cashDollar.stopAllActions();
         this.cashDollar.scale = 1.5;
         this.cashDollar.opacity = 0;
-        this.cashDollar.runAction(cc.spawn( cc.scaleTo(0.5, 1), cc.fadeTo(0.5, 255)));
+        this.cashDollar.runAction(cc.spawn(cc.scaleTo(0.5, 1), cc.fadeTo(0.5, 255)));
 
         let rate = this.chapterExp / chapterPassExp;
         if (rate >= 1) {
@@ -207,7 +214,41 @@ let Main = cc.Class({
         let rigidbody = car.getComponent(cc.RigidBody);
         rigidbody.enabledContactListener = true;
         this.activeCars.addChild(car);
+
+        car.destroyTimeout = setTimeout(()=>{
+            car.getComponent("Car").clearTailGus();
+            this.carPool.put(car);
+        },10000);
         return car;
+    },
+
+    makeTailGus(carNode) {
+        // console.log("Main-makeTailGus");
+        let tailGus;
+        if (this.tailGusPool.size() > 0) {
+            tailGus = this.tailGusPool.get();
+        } else {
+            tailGus = cc.instantiate(this.TailGus);
+        }
+        let rota = carNode.rotation;
+        let adjustX = 0, adjustY = 0;
+        if(rota < 90){
+            adjustX = carNode.width / 2;
+        }else if(rota < 180){
+            adjustY = -carNode.width / 2;
+        }else if(rota < 270){
+            adjustX = -carNode.width / 2;
+        }else{
+            adjustY = carNode.width / 2;
+        }
+        tailGus.x = carNode.x + adjustX + Math.random() * 50 - 25;
+        tailGus.y = carNode.y + adjustY + Math.random() * 50 - 25;
+        // console.log("tailGus position:", tailGus.x, tailGus.y);
+        tailGus.active = true;
+        this.node.addChild(tailGus);
+        setTimeout(() => {
+            this.tailGusPool.put(tailGus);
+        }, 2000);
     },
 
     setGravity(g) {
@@ -252,6 +293,8 @@ let Main = cc.Class({
         }
         let activeCars = this.activeCars.children;
         for (let car of activeCars) {
+            car.getComponent("Car").clearTailGus();
+            clearTimeout(car.destroyTimeout);
             this.carPool.put(car);
         }
     },

@@ -1,4 +1,3 @@
-
 let AudioManager = require("AudioManager");
 
 cc.Class({

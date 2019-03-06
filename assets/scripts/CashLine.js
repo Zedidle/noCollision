@@ -70,13 +70,12 @@ cc.Class({
                 Main.instance.cashDollar.active = true;
             }
 
-
-            let exp = (other.node.carLevel + 1) * 20;
-            this.collisionExplosion(exp);
-            Main.instance.updateChapterLine(exp);
-            setTimeout(() => {
-                if (other.node) Main.instance.carPool.put(other.node);
-            }, 5000);
+            let value = (other.node.carLevel + 1) * 20;
+            this.collisionExplosion(value);
+            Main.instance.updateChapterLine(value);
+            // setTimeout(() => {
+            //     if (other.node) Main.instance.carPool.put(other.node);
+            // }, 5000);
         }
     },
 
